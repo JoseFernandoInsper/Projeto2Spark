@@ -4,6 +4,7 @@ import math
 import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+import pandas as pd
 
 sc = pyspark.SparkContext(appName="jojo")
 
@@ -87,3 +88,12 @@ if __name__ == "__main__":
     relevancia_rakin = rdd_rakin_join.map(relevancia)
     relevancia_yoda = rdd_yoda_join.map(relevancia)
     relevancia_inter = rdd_inter_join.map(relevancia)
+
+    rakin_data = pd.DataFrame(relevancia_rakin, columns=["palavra", "relevancia"])
+    yoda_data = pd.DataFrame(relevancia_yoda, columns=["palavra", "relevancia"])
+    inter_data = pd.DataFrame(relevancia_inter, columns=["palavra", "relevancia"])
+
+    rakinBD = rakin_data.to_csv("s3linknosso", index=False)
+    yodaBD = yoda_data.to_csv("s3linknosso", index=False)
+    interBD = inter_data.to_csvI("s3linknosso", index=False)
+
