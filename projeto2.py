@@ -93,9 +93,15 @@ if __name__ == "__main__":
     relevancia_yoda = rdd_yoda_join.map(relevancia)
     relevancia_inter = rdd_inter_join.map(relevancia)
 
-    rakin_data = pd.DataFrame(relevancia_rakin, columns=["palavra", "relevancia"])
-    yoda_data = pd.DataFrame(relevancia_yoda, columns=["palavra", "relevancia"])
-    inter_data = pd.DataFrame(relevancia_inter, columns=["palavra", "relevancia"])
+    
+    rakin_list = relevancia_rakin.takeOrdered(100, key=lambda x: -x[1])
+    yoda_list = relevancia_yoda.takeOrdered(100, key=lambda x: -x[1])
+    inter_list = relevancia_inter.takeOrdered(100, key=lambda x: -x[1])
+
+
+    rakin_data = pd.DataFrame(data = relevancia_rakin, columns=["palavra", "relevancia"])
+    yoda_data = pd.DataFrame(data = relevancia_yoda, columns=["palavra", "relevancia"])
+    inter_data = pd.DataFrame(data = relevancia_inter, columns=["palavra", "relevancia"])
 
     rakinBD = rakin_data.to_csv("s3linknosso", index=False)
     yodaBD = yoda_data.to_csv("s3linknosso", index=False)
