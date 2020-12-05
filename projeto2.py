@@ -72,6 +72,10 @@ if __name__ == "__main__":
     rdd_doc_yoda = Yoda.flatMap(conta_palavras_doc).reduceByKey(junta_contagens)
     rdd_doc_inter = inter.flatMap(conta_palavras_doc).reduceByKey(junta_contagens)
 
+    rdd_doc_rakin_freq_filtrado = rdd_doc_rakin.filter(filtra_doc_freq)
+    rdd_doc_yoda_freq_filtrado = rdd_doc_yoda.filter(filtra_doc_freq)
+    rdd_doc_inter_freq_filtrado = rdd_doc_inter.filter(filtra_doc_freq)
+
     rakin_rdd_idf = rdd_doc_rakin_freq_filtrado.map(computa_idf)
     yoda_rdd_idf = rdd_doc_yoda_freq_filtrado.map(computa_idf)
     inter_rdd_idf = rdd_doc_inter_freq_filtrado.map(computa_idf)
